@@ -1,20 +1,17 @@
 <template>
   <div class="hello">
-       
+     
+       <img :src="'https://image.tmdb.org/t/p/w500/'" alt="">
     <div  v-for="item in info.data.folders" :key="item.folders"  >
-      
+     
       <h1 class="name">{{ item.name }}</h1>
-      
-      {{anime.title}}
-    
-
-      
-       
-      
+       <img :src="'https://image.tmdb.org/t/p/w200/' + tmdb.results[0].poster_path"/>
       <router-link :to="{ name: 'Anime', params: { id: item.fld_id, hash: item.hash, name: item.name }}">Regarder</router-link>
 
       
       </div>
+
+     
     
     
 
@@ -34,19 +31,17 @@ export default {
     return{
       info: '',
       info1: '',
-      anime: '',
+      tmdb: '',
+      watch: ''
   
 
     }
   },
 
   created() {
-    this.callapi();
+   this.callapi();
     this.callapiF();
-    this.callApiTmdb();
-  
-    
-    
+    this.callApiTmdb()
 
   },
 
@@ -59,21 +54,21 @@ export default {
       axios
           .get('https://uptobox.com/api/user/files?token=5296b917ac756c54806f9d44d020083c2bqnj&path=//Anime&limit=100')
           .then(response => {this.info = response.data
+            let watch = this.info.data.folders;
+           console.log(watch[0].name)
 
-          for (let i = 0; i < this.info.data.folders.length; i++){
-              
-               axios
-          .get('https://api.themoviedb.org/3/search/movie?language=fr&api_key=a769aba61ba3f4584d34a56d5f6ece11&query=' + this.info.data.folders[i].name)
-          .then(response => {this.anime = response.data.results[i];   
+                watch.forEach(element => {console.log(element.name)
+          axios
+          .get('https://api.themoviedb.org/3/search/tv?language=fr&api_key=a769aba61ba3f4584d34a56d5f6ece11&query=' + element.name)
+          .then(response => {this.tmdb = response.data;   
 
-              console.log(this.anime)
+
+          console.log(this.tmdb)
+           
               
             
            })
-         
-            
-          
-           }
+         });
           })
     },
     callapiF(){
@@ -83,6 +78,14 @@ export default {
     },
 
     callApiTmdb(){
+            
+     
+         
+         
+         
+            
+          
+           
       
     }
 
